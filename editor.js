@@ -168,13 +168,64 @@ document.addEventListener('DOMContentLoaded', async () => {
     imageUpload.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                loadImageFromDataURL(e.target.result, file.name, formatFileSize(file.size));
-            };
-            reader.readAsDataURL(file);
+            handleFile(file);
         }
     });
+
+    // Drag and Drop Logic
+    const dropZone = document.getElementById('dropZone');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight(e) {
+        dropZone.classList.add('drag-over');
+    }
+
+    function unhighlight(e) {
+        dropZone.classList.remove('drag-over');
+    }
+
+    dropZone.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+    }
+
+    function handleFiles(files) {
+        if (files.length > 0) {
+            const file = files[0];
+            if (file.type.startsWith('image/')) {
+                handleFile(file);
+            } else {
+                alert('Please upload an image file.');
+            }
+        }
+    }
+
+    function handleFile(file) {
+         const reader = new FileReader();
+         reader.onload = (e) => {
+             loadImageFromDataURL(e.target.result, file.name, formatFileSize(file.size));
+         };
+         reader.readAsDataURL(file);
+    }
 
     // Handle image scaling
     scaleImageBtn.addEventListener('click', () => {

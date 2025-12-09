@@ -24,11 +24,19 @@
 
     <h1>__MSG_imageToolkitTitle__</h1>
 
-    <div class="input-section">
-        <label for="imageUpload">__MSG_uploadImageLabel__</label>
+    <div class="input-section"
+         id="dropZone">
+        <label for="imageUpload"
+               class="upload-label">
+            <p style="font-size: 24px; margin: 10px 0;">📁</p>
+            <span style="font-weight: bold; font-size: 1.1em;">__MSG_uploadImageLabel__</span>
+            <p class="sub-text"
+               style="color: #666; margin-top: 5px;">__MSG_dropZoneText__</p>
+        </label>
         <input type="file"
                id="imageUpload"
-               accept="image/*">
+               accept="image/*"
+               style="display:none">
     </div>
 
     <div class="image-display-section">

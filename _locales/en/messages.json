@@ -170,5 +170,9 @@
     "imageInfoText": {
         "message": "Filename: %s, Extension: %s, Size: %s, Width: %s, Height: %s",
         "description": "Image information text. Placeholders for filename, extension, file size, width, height."
+    },
+    "dropZoneText": {
+        "message": "or Drag and Drop image here",
+        "description": "Text instructing user to drag and drop image."
     }
 }

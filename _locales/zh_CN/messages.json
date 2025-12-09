@@ -63,18 +63,15 @@
         "message": "X轴：",
         "description": "Label for crop X coordinate."
     },
-    "cropYLabel":
-    {
+    "cropYLabel": {
         "message": "Y轴：",
         "description": "Label for crop Y coordinate."
     },
-    "cropWidthLabel":
-    {
+    "cropWidthLabel": {
         "message": "宽度：",
         "description": "Label for crop width."
     },
-    "cropHeightLabel":
-    {
+    "cropHeightLabel": {
         "message": "高度：",
         "description": "Label for crop height."
     },
@@ -159,7 +156,11 @@
         "description": "Alert message for crop area out of bounds."
     },
     "imageInfoText": {
-        "message": "文件名称：%s，扩展名：%s，宽度：%s，高度：%s",
-        "description": "Image information text. Placeholders for filename, extension, width, height."
+        "message": "文件名: %s, 扩展名: %s, 大小: %s, 宽度: %s, 高度: %s",
+        "description": "Image information text. Placeholders for filename, extension, file size, width, height."
+    },
+    "dropZoneText": {
+        "message": "或将图片拖拽至此",
+        "description": "Text instructing user to drag and drop image."
     }
 }

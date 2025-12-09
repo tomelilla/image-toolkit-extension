@@ -168,7 +168,11 @@
         "description": "Alert message for crop area out of bounds."
     },
     "imageInfoText": {
-        "message": "檔案名稱：%s，副檔名：%s，大小：%s，寬度：%s，高度：%s",
+        "message": "檔名: %s, 副檔名: %s, 大小: %s, 寬度: %s, 高度: %s",
         "description": "Image information text. Placeholders for filename, extension, file size, width, height."
+    },
+    "dropZoneText": {
+        "message": "或將圖片拖曳至此",
+        "description": "Text instructing user to drag and drop image."
     }
 }

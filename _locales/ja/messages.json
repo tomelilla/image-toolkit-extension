@@ -63,18 +63,15 @@
         "message": "X座標：",
         "description": "Label for crop X coordinate."
     },
-    "cropYLabel":
-    {
+    "cropYLabel": {
         "message": "Y座標：",
         "description": "Label for crop Y coordinate."
     },
-    "cropWidthLabel":
-    {
+    "cropWidthLabel": {
         "message": "幅：",
         "description": "Label for crop width."
     },
-    "cropHeightLabel":
-    {
+    "cropHeightLabel": {
         "message": "高さ：",
         "description": "Label for crop height."
     },
@@ -159,7 +156,11 @@
         "description": "Alert message for crop area out of bounds."
     },
     "imageInfoText": {
-        "message": "ファイル名：%s、拡張子：%s、幅：%s、高さ：%s",
-        "description": "Image information text. Placeholders for filename, extension, width, height."
+        "message": "ファイル名: %s, 拡張子: %s, サイズ: %s, 幅: %s, 高さ: %s",
+        "description": "Image information text. Placeholders for filename, extension, file size, width, height."
+    },
+    "dropZoneText": {
+        "message": "または画像をここにドラッグ＆ドロップ",
+        "description": "Text instructing user to drag and drop image."
     }
 }
