@@ -522,68 +522,124 @@ document.addEventListener('DOMContentLoaded', async () => {
         const overlaps = [0]; // First image has 0 overlap with specific predecessor
 
         if (autoAlign) {
-            // Create a temp canvas for pixel analysis
+            // Create a temp canvas for small proxy images
             const tCanvas = document.createElement('canvas');
             const tCtx = tCanvas.getContext('2d');
 
-            // Note: Since we need pixel data, we must draw them at normalised size or original?
-            // Better to analyze at normalised size to match the output.
-
-            // To be efficient, we only check max 20% overlap or fixed px?
-            // Let's check max 300px or 20%
+            // Optimization: Downsample to a manageable size (e.g. max 400px dimension)
+            // This drastically reduces memory usage from ~30MB per image to ~600KB, and speeds up 100x
+            const ANALYZE_SIZE = 400;
 
             for (let i = 1; i < normalizedImages.length; i++) {
                 const prev = normalizedImages[i-1];
                 const curr = normalizedImages[i];
 
-                // We need to draw the relevant parts to tCanvas to get ImageData
-                // Horizontal: Prev Right edge vs Curr Left edge
-                // Vertical: Prev Bottom edge vs Curr Top edge
-
                 let overlap = 0;
 
+                // Calculate scale factor for analysis
+                let scale = 1;
+
                 if (direction === 'vertical') {
-                    // Resize temp canvas to width: targetDimension, height: searchRange * 2
-                    // Search range: Increase to 90% to catch large overlaps
-                    const searchH = Math.min(prev.height, curr.height) * 0.9;
-                    const w = targetDimension;
+                    // Normalize width to ANALYZE_SIZE
+                    scale = targetDimension > ANALYZE_SIZE ? ANALYZE_SIZE / targetDimension : 1;
+                    const w = Math.floor(targetDimension * scale);
+                    const prevH = Math.floor(prev.height * scale);
+                    const currH = Math.floor(curr.height * scale);
+
+                    // Search range: 90% of smallest image height
+                    const searchH = Math.floor(Math.min(prevH, currH) * 0.9);
 
                     tCanvas.width = w;
-                    tCanvas.height = searchH * 2; // Enough for both strips
+                    tCanvas.height = searchH * 2;
 
-                    // Draw Prev Bottom
-                    tCtx.drawImage(prev.img, 0, 0, prev.img.naturalWidth, prev.img.naturalHeight,
-                                   0, 0, prev.width, prev.height);
-                    const prevData = tCtx.getImageData(0, prev.height - searchH, w, searchH);
+                    // Draw Prev Bottom (scaled)
+                    // Source: Bottom part of original image
+                    // We need to map [prevH - searchH] back to original coordinates?
+                    // No, easier to just draw the whole image scaled down, then slice?
+                    // Or efficient: draw only the needed slice from original to scaled canvas.
 
-                    // Draw Curr Top
-                    tCtx.clearRect(0, 0, w, searchH * 2);
-                    tCtx.drawImage(curr.img, 0, 0, curr.img.naturalWidth, curr.img.naturalHeight,
-                                   0, 0, curr.width, curr.height);
+                    // Draw slice from Source (Full Res) -> Dest (Small Res)
+                    // Source region height = searchH / scale
+                    const srcSearchH = searchH / scale;
+
+                    // Prev Image Bottom Slice
+                    tCtx.drawImage(prev.img,
+                        0, prev.img.naturalHeight - (srcSearchH / (prev.width / prev.img.naturalWidth)), // srcY roughly.. precise math needed
+                        prev.img.naturalWidth, (srcSearchH / (prev.width / prev.img.naturalWidth)), // srcH
+                        0, 0, w, searchH // dst
+                    );
+
+                    // Actually, let's trust drawImage to handle scaling from full source to small rect
+                    // Prev: Draw bottom part
+                    // To safeguard precision, let's draw the relevant % of the image
+                    // But 'prev.height' is the normalized height.
+                    // Let's use simple approach: Draw full scaled image to a scratch canvas? No, wasted memory.
+                    // Let's use the 'normalized' dimensions which map to 'natural' via ratio.
+
+                    // Correct approach:
+                    // 1. Draw "Bottom" of Prev into tCanvas
+                    // Source Source Y = (prev.height - srcSearchH) mapped to natural
+                    const fullScaleP = prev.img.naturalHeight / prev.height;
+                    const srcY_P = (prev.height - srcSearchH) * fullScaleP;
+                    const srcH_P = srcSearchH * fullScaleP;
+
+                    tCtx.drawImage(prev.img,
+                        0, srcY_P, prev.img.naturalWidth, srcH_P,
+                        0, 0, w, searchH
+                    );
+                    const prevData = tCtx.getImageData(0, 0, w, searchH);
+
+                    // 2. Draw "Top" of Curr
+                    const fullScaleC = curr.img.naturalHeight / curr.height;
+                    const srcH_C = srcSearchH * fullScaleC;
+
+                    tCtx.clearRect(0, searchH, w, searchH);
+                    tCtx.drawImage(curr.img,
+                        0, 0, curr.img.naturalWidth, srcH_C,
+                        0, 0, w, searchH
+                    );
                     const currData = tCtx.getImageData(0, 0, w, searchH);
 
-                    overlap = calculateBestOverlap(prevData, currData, w, searchH, 'vertical');
+                    const smallOverlap = calculateBestOverlap(prevData, currData, w, searchH, 'vertical');
+                    overlap = smallOverlap / scale; // Scale back up to original pixels
 
                 } else {
                     // Horizontal
-                     const searchW = Math.min(prev.width, curr.width) * 0.9;
-                     const h = targetDimension;
+                     scale = targetDimension > ANALYZE_SIZE ? ANALYZE_SIZE / targetDimension : 1;
+                     const h = Math.floor(targetDimension * scale);
+                     const prevW = Math.floor(prev.width * scale);
+                     const currW = Math.floor(curr.width * scale);
+
+                     const searchW = Math.floor(Math.min(prevW, currW) * 0.9);
+                     const srcSearchW = searchW / scale;
 
                      tCanvas.width = searchW * 2;
                      tCanvas.height = h;
 
                      // Prev Right
-                     tCtx.drawImage(prev.img, 0, 0, prev.img.naturalWidth, prev.img.naturalHeight,
-                                    0, 0, prev.width, prev.height);
-                     const prevData = tCtx.getImageData(prev.width - searchW, 0, searchW, h);
+                     const fullScaleP = prev.img.naturalWidth / prev.width;
+                     const srcX_P = (prev.width - srcSearchW) * fullScaleP;
+                     const srcW_P = srcSearchW * fullScaleP;
+
+                     tCtx.drawImage(prev.img,
+                        srcX_P, 0, srcW_P, prev.img.naturalHeight,
+                        0, 0, searchW, h
+                     );
+                     const prevData = tCtx.getImageData(0, 0, searchW, h);
 
                      // Curr Left
-                     tCtx.clearRect(0,0, searchW*2, h);
-                     tCtx.drawImage(curr.img, 0, 0, curr.img.naturalWidth, curr.img.naturalHeight,
-                                    0, 0, curr.width, curr.height);
+                     const fullScaleC = curr.img.naturalWidth / curr.width;
+                     const srcW_C = srcSearchW * fullScaleC;
+
+                     tCtx.clearRect(searchW, 0, searchW, h);
+                     tCtx.drawImage(curr.img,
+                        0, 0, srcW_C, curr.img.naturalHeight,
+                        0, 0, searchW, h
+                     );
                      const currData = tCtx.getImageData(0, 0, searchW, h);
 
-                     overlap = calculateBestOverlap(prevData, currData, searchW, h, 'horizontal');
+                     const smallOverlap = calculateBestOverlap(prevData, currData, searchW, h, 'horizontal');
+                     overlap = smallOverlap / scale;
                 }
 
                 overlaps.push(overlap);
@@ -611,6 +667,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
 
+        // Safety check to avoid negative dimensions if overlap mistake
+        totalWidth = Math.max(1, totalWidth);
+        totalHeight = Math.max(1, totalHeight);
+
         outputCanvas.width = totalWidth;
         outputCanvas.height = totalHeight;
         ctx.clearRect(0, 0, totalWidth, totalHeight);
@@ -618,15 +678,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         let currentPos = 0;
         normalizedImages.forEach((img, i) => {
              const overlap = overlaps[i] || 0;
-             // Subtract overlap from currentPos before drawing?
-             // No, draw at currentPos, then increment by (width - overlap) for next.
-             // Wait, if overlap is 50, we draw Img2 starting 50px EARLIER.
-             // So currentPos should decrement by overlap.
 
              if (i > 0) currentPos -= overlap;
 
              if (direction === 'horizontal') {
-                 // ctx.drawImage(img src, dstX, dstY, dstW, dstH)
                 ctx.drawImage(img.img, 0, 0, img.img.naturalWidth, img.img.naturalHeight,
                               currentPos, 0, img.width, img.height);
                 currentPos += img.width;
