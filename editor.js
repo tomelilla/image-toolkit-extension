@@ -552,8 +552,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if (direction === 'vertical') {
                     // Resize temp canvas to width: targetDimension, height: searchRange * 2
-                    // Search range: min(prev.height, curr.height) * 0.3
-                    const searchH = Math.min(prev.height, curr.height) * 0.3;
+                    // Search range: Increase to 90% to catch large overlaps
+                    const searchH = Math.min(prev.height, curr.height) * 0.9;
                     const w = targetDimension;
 
                     tCanvas.width = w;
@@ -574,7 +574,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 } else {
                     // Horizontal
-                     const searchW = Math.min(prev.width, curr.width) * 0.3;
+                     const searchW = Math.min(prev.width, curr.width) * 0.9;
                      const h = targetDimension;
 
                      tCanvas.width = searchW * 2;
@@ -678,6 +678,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Range: 10 pixels to limit/2 ? or full limit?
         // Let's require at least 10px overlap to be "confident" and avoid false positives on 1px lines.
 
+        // Scan starting from 5px to avoid edge noise
         for (let k = 5; k < limit; k++) {
              // Calculate error for overlap 'k'
              let error = 0;
@@ -701,9 +702,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                  // If k is large, this loop is O(k * w * k) -> O(w*k^2).
                  // If w=1000, k=200, 1000*40000 = 40M ops. A bit heavy for UI thread?
-                 // Let's sample 10 columns.
-
-                 const stepX = Math.floor(w / 10) || 1;
+                 // Optimization: sample every 5th column
+                 const stepX = Math.floor(w / 80) || 1; // Sample ~80 points across width
 
                  for (let y = 0; y < k; y++) {
                      for (let x = 0; x < w; x += stepX) {
@@ -724,7 +724,8 @@ document.addEventListener('DOMContentLoaded', async () => {
              } else {
                  // Horizontal
                  // Compare Prev Col (w-k+x) with Curr Col (x)
-                 const stepY = Math.floor(h / 10) || 1;
+                 // Sample every 5th row
+                 const stepY = Math.floor(h / 80) || 1;
 
                   for (let x = 0; x < k; x++) {
                      for (let y = 0; y < h; y += stepY) {
@@ -753,10 +754,9 @@ document.addEventListener('DOMContentLoaded', async () => {
              }
         }
 
-        // Threshold check: If minError is massive, maybe it's not an overlap?
-        // MSE for identical is 0. For JPEG artifacts, maybe < 50-100?
-        // 255^2 = 65000. 100 is very small.
-        if (minError > 500) return 0; // No good match found
+        // Threshold check
+        // Relaxed threshold to 2500 (~50 avg diff) for compression handling
+        if (minError > 2500) return 0;
 
         return bestOffset;
     }
