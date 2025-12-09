@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const compressQualityInput = document.getElementById('compressQuality');
     const compressImageBtn = document.getElementById('compressImage');
     const cropImageBtn = document.getElementById('cropImage');
-    const removeBackgroundBtn = document.getElementById('removeBackground');
+
 
     const stitchDirectionSelect = document.getElementById('stitchDirection');
     const autoAlignCheckbox = document.getElementById('autoAlignStitch');
@@ -464,15 +464,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         displayProcessedImage(croppedCanvas.toDataURL('image/png')); // Force PNG for transparency support (round)
     });
 
-    // Placeholder for remove background
-    removeBackgroundBtn.addEventListener('click', () => {
-        if (!uploadedImage) {
-            alert(I18nManager.getMessage('pleaseUploadImageFirst'));
-            return;
-        }
-        alert(I18nManager.getMessage('backgroundRemovalComplex'));
-        // This will likely require a dedicated library or API
-    });
+
 
     // Stitch Logic
     stitchImagesBtn.addEventListener('click', async () => {
