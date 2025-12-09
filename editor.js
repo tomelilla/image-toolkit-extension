@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const compressImageBtn = document.getElementById('compressImage');
     const cropImageBtn = document.getElementById('cropImage');
     const removeBackgroundBtn = document.getElementById('removeBackground');
-    const imageUploadStitch = document.getElementById('imageUploadStitch');
+
     const stitchDirectionSelect = document.getElementById('stitchDirection');
     const stitchImagesBtn = document.getElementById('stitchImages');
 
@@ -473,53 +473,41 @@ document.addEventListener('DOMContentLoaded', async () => {
         // This will likely require a dedicated library or API
     });
 
-    // Handle image upload for stitching
-    imageUploadStitch.addEventListener('change', (event) => {
-        uploadedStitchImages = [];
-        const files = event.target.files;
-        if (files.length > 0) {
-            let loadedCount = 0;
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        uploadedStitchImages.push(img);
-                        loadedCount++;
-                        if (loadedCount === files.length) {
-                            alert(`${loadedCount} ${I18nManager.getMessage('imagesLoadedForStitching')}`);
-                        }
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    });
-
-    // Placeholder for stitch images
-    stitchImagesBtn.addEventListener('click', () => {
-        if (uploadedStitchImages.length < 2) {
+    // Stitch Logic
+    stitchImagesBtn.addEventListener('click', async () => {
+        if (uploadedImagesList.length < 2) {
             alert(I18nManager.getMessage('atLeastTwoImagesForStitching'));
             return;
         }
+
         const direction = stitchDirectionSelect.value;
+        const imagesToStitch = [];
+
+        // Load all images
+        const loadPromises = uploadedImagesList.map(item => {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.src = item.dataUrl;
+            });
+        });
+
+        const loadedImages = await Promise.all(loadPromises);
 
         let totalWidth = 0;
         let totalHeight = 0;
         let maxWidth = 0;
         let maxHeight = 0;
 
-        // Calculate total dimensions for the canvas
+        // Calculate total dimensions
         if (direction === 'horizontal') {
-            for (const img of uploadedStitchImages) {
+            for (const img of loadedImages) {
                 totalWidth += img.naturalWidth;
                 maxHeight = Math.max(maxHeight, img.naturalHeight);
             }
             totalHeight = maxHeight;
         } else { // vertical
-            for (const img of uploadedStitchImages) {
+            for (const img of loadedImages) {
                 totalHeight += img.naturalHeight;
                 maxWidth = Math.max(maxWidth, img.naturalWidth);
             }
@@ -533,7 +521,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let currentX = 0;
         let currentY = 0;
 
-        for (const img of uploadedStitchImages) {
+        for (const img of loadedImages) {
             if (direction === 'horizontal') {
                 ctx.drawImage(img, currentX, 0, img.naturalWidth, maxHeight);
                 currentX += img.naturalWidth;
