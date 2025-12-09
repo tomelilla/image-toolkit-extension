@@ -43,6 +43,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     const downloadLink = document.getElementById('downloadLink');
     const ctx = outputCanvas.getContext('2d');
 
+    // Tab Logic
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+             // Remove active class from all
+             tabBtns.forEach(b => b.classList.remove('active'));
+             tabContents.forEach(c => c.classList.remove('active'));
+
+             // Add active to clicked and target
+             btn.classList.add('active');
+             const tabId = btn.getAttribute('data-tab');
+             document.getElementById(`tab-${tabId}`).classList.add('active');
+        });
+    });
+
     let uploadedImage = null; // Stores the image data
     let uploadedStitchImages = []; // Stores images for stitching
     let currentImageMetadata = null; // Store metadata for re-localization
@@ -113,6 +130,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 autoCrop: true,
             });
             cropToolsContainer.style.display = 'block';
+            const cropMessage = document.getElementById('cropMessage');
+            if (cropMessage) cropMessage.style.display = 'none';
             btnCropFree.classList.add('active');
         };
         uploadedImage.src = dataURL;
