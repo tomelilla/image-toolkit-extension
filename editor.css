@@ -1,0 +1,14 @@
+/* Specific overrides for the full-page editor */
+body {
+    width: auto !important;
+    min-width: 800px;
+    max-width: 1200px;
+    margin: 0 auto !important;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Allow larger image view in editor compared to popup */
+.img-container {
+    max-height: 80vh;
+}
