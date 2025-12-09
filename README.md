@@ -2,19 +2,37 @@
 
 **Author:** GeminiCLI {gemini-1.5-pro-002}
 
-This Chrome extension provides a suite of image manipulation tools directly within your browser popup. It allows users to perform various operations on uploaded images, including analysis, scaling, compression, cropping, and smart stitching.
+This Chrome extension provides a comprehensive suite of image manipulation tools directly within your browser popup. Designed for efficiency and privacy, it allows users to perform various operations on uploaded images locally, without sending data to any external server.
 
 ## Features
 
-*   **Multi-Image Management**: Upload multiple images via drag & drop and manage them in a list.
-*   **Image Compression**: Reduce file size with adjustable quality and format selection (**JPEG, PNG, WebP**).
-*   **Smart Stitching**:
-    *   Combine images horizontally or vertically.
-    *   **Auto-Normalize**: Automatically matches image dimensions.
-    *   **Smart Overlap Removal**: Detects and removes redundant overlapping areas (great for scrolling screenshots).
-*   **Image Cropping**: Crop images to specific aspect ratios (Free, Square, 16:9, Round) or custom dimensions.
-*   **Proportional Scaling**: Resize images by percentage.
-*   **Privacy First**: All processing is done locally in your browser. No images are uploaded to any server.
+### 1. Multi-Image Management
+- **List View**: Upload multiple images via drag & drop or file selection.
+- **Thumbnail Navigation**: Easily switch between uploaded images using the thumbnail list.
+- **Batch Ready**: All uploaded images can be used for stitching.
+
+### 2. Smart Image Stitching
+Combine multiple screenshots or images into a single file.
+- **Directions**: Support for both **Horizontal** and **Vertical** stitching.
+- **Auto-Normalize**: Automatically resizes all images to match dimensions (e.g., same width for vertical stitching) to prevent jagged edges.
+- **Smart Stitch (Auto-Remove Overlap)**:
+    - Automatically detects and removes duplicate overlapping areas between images.
+    - Perfect for creating long screenshots from multiple scrolling captures.
+    - Optimized algorithm ensures fast processing even for large images.
+
+### 3. Image Compression
+Reduce file size without losing quality.
+- **Format Support**: Convert to **JPEG**, **PNG**, or **WebP**.
+- **Quality Control**: Adjustable slider (0-100) to fine-tune the balance between file size and quality.
+
+### 4. Image Editing Tools
+- **Crop**: Crop images with freeform or preset aspect ratios (Square, 16:9, Round).
+- **Scale**: Proportionally resize images by percentage.
+- **Analyze**: View detailed image metadata (dimensions, types).
+
+### 5. Privacy First & Local Processing
+- All image operations are performed **entirely within your browser**.
+- **No data upload**: Your images never leave your device.
 
 ## Installation
 
@@ -36,14 +54,10 @@ To install and use the Image Toolkit extension:
 
 ## Usage
 
-1.  **Open Extension**: Click the icon in the toolbar.
-2.  **Upload Images**: Drag & drop images or click the dashed area to upload.
-3.  **Select Tool**:
-    *   **Compress**: Choose format (JPEG/PNG/WebP) and quality.
-    *   **Scale**: Resize by percentage.
-    *   **Crop**: Select cropped area.
-    *   **Stitch**: Switch to "Stitch" tab. All uploaded images will be used. Select direction and optionally enabling "Auto-remove overlap" for smart stitching.
-4.  **Download**: Click "Download Image" to save the result.
+1.  **Upload**: Click the extension icon and drag images into the drop zone.
+2.  **Edit**: Use the tabs to switch between tools (Compress, Scale, Crop, Stitch).
+3.  **Stitch**: To stitch images, ensure multiple images are uploaded. Go to the **Stitch** tab and click "Stitch". Enable "Auto-remove (Smart Stitch)" for scrolling screenshots.
+4.  **Download**: Click "Download Image" to save the result. Files are automatically named with a timestamp.
 
 ## Release Notes
 
