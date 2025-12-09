@@ -60,9 +60,9 @@
         <!-- Tab Navigation -->
         <div class="tabs-header">
             <button class="tab-btn active"
-                    data-tab="scale">__MSG_imageScalingTitle__</button>
-            <button class="tab-btn"
                     data-tab="compress">__MSG_imageCompressionTitle__</button>
+            <button class="tab-btn"
+                    data-tab="scale">__MSG_imageScalingTitle__</button>
             <button class="tab-btn"
                     data-tab="crop">__MSG_imageCroppingTitle__</button>
             <button class="tab-btn"
@@ -73,28 +73,9 @@
 
         <!-- Tab Contents -->
         <div class="tabs-body">
-            <!-- Scale Tab -->
-            <div id="tab-scale"
-                 class="tab-content active">
-                <h3>__MSG_imageScalingTitle__</h3>
-                <div class="scaling-options">
-                    <input type="number"
-                           id="scalePercentage"
-                           placeholder="__MSG_percentagePlaceholder__"> %
-                    <span>__MSG_orText__</span>
-                    <input type="number"
-                           id="scaleWidth"
-                           placeholder="__MSG_widthPlaceholder__"> x
-                    <input type="number"
-                           id="scaleHeight"
-                           placeholder="__MSG_heightPlaceholder__"> px
-                </div>
-                <button id="scaleImage">__MSG_scaleButton__</button>
-            </div>
-
             <!-- Compress Tab -->
             <div id="tab-compress"
-                 class="tab-content">
+                 class="tab-content active">
                 <h3>__MSG_imageCompressionTitle__</h3>
                 <div class="compress-options"
                      style="margin-bottom: 10px;">
@@ -114,6 +95,25 @@
                        max="100"
                        value="80">
                 <button id="compressImage">__MSG_compressButton__</button>
+            </div>
+
+            <!-- Scale Tab -->
+            <div id="tab-scale"
+                 class="tab-content">
+                <h3>__MSG_imageScalingTitle__</h3>
+                <div class="scaling-options">
+                    <input type="number"
+                           id="scalePercentage"
+                           placeholder="__MSG_percentagePlaceholder__"> %
+                    <span>__MSG_orText__</span>
+                    <input type="number"
+                           id="scaleWidth"
+                           placeholder="__MSG_widthPlaceholder__"> x
+                    <input type="number"
+                           id="scaleHeight"
+                           placeholder="__MSG_heightPlaceholder__"> px
+                </div>
+                <button id="scaleImage">__MSG_scaleButton__</button>
             </div>
 
             <!-- Crop Tab -->
