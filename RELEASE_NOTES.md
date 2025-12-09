@@ -16,10 +16,13 @@
     - **Drag & Drop**: Improved drop zone for uploading images.
     - **Output Stats**: Displays file size and dimensions of the processed image.
     - **Timestamped Filenames**: Downloaded files now include a timestamp for better organization.
+    - **Full Screen Mode**: Added "Open Full Screen" button in popup for better editing experience.
 
 ### Removed
 - **Background Removal**: Removed placeholder feature as per user request.
 
 ### Fixed
+- **Cropping**: Fixed issue where crop selection was offset due to CSS conflicts.
+- **Popup**: Fixed broken Drag & Drop upload and added reliable error handling for large files.
 - **Stitching**: Fixed issue where images of different sizes caused misalignment.
 - **Performance**: Resolved memory issues during high-res image stitching.

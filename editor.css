@@ -140,3 +140,13 @@ body {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+/* Image Preview State */
+.img-preview {
+    max-width: 100%;
+    display: none; /* Hidden by default */
+}
+
+.img-preview.visible {
+    display: block;
+}

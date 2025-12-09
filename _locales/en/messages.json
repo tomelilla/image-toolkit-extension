@@ -202,5 +202,9 @@
     "enableAutoAlign": {
         "message": "Auto-remove (Smart Stitch)",
         "description": "Label for auto-align checkbox."
+    },
+    "openFullScreen": {
+        "message": "Open Full Screen",
+        "description": "Button to open editor in a new tab."
     }
 }

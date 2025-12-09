@@ -111,6 +111,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     function initCropper() {
         if (!uploadedImage || cropper) return; // Don't re-init or init if no image
 
+        // Remove the responsive class so Cropper can calculate dimensions correctly without CSS interference
+        originalImage.classList.remove('img-preview');
+        originalImage.classList.remove('visible');
+        // Ensure max-width is not limiting (though removing class should do it if class has max-width)
+        // Check if there are inline styles left?
+        originalImage.style.maxWidth = 'none';
+        originalImage.style.display = 'block'; // Make sure it's display block for cropper to wrap
+
         cropper = new Cropper(originalImage, {
             viewMode: 1,
             autoCrop: true,
@@ -123,21 +131,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Helper to reset cropper
+    // Helper to reset cropper
     function destroyCropper() {
         if (cropper) {
             cropper.destroy();
             cropper = null;
         }
         isRoundCrop = false;
+
+        // Restore standard preview styles
+        originalImage.style.maxWidth = '';
+        originalImage.style.display = ''; // Clear inline display (control via class)
+        originalImage.classList.add('img-preview');
+        if (uploadedImage) {
+            originalImage.classList.add('visible');
+        }
+
         // Reset buttons
         document.querySelectorAll('.crop-mode-btn').forEach(btn => btn.classList.remove('active'));
     }
 
     // Load image from Data URL
     function loadImageFromDataURL(dataURL, fileName, fileSizeStr) {
-        destroyCropper();
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
         originalImage.src = dataURL;
-        originalImage.style.display = 'block';
+        originalImage.classList.add('visible'); // Use class for visibility
         uploadedImage = new Image();
         uploadedImage.onload = () => {
              // Reset output

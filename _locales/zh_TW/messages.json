@@ -202,5 +202,9 @@
     "enableAutoAlign": {
         "message": "自動移除重疊 (智慧拼接)",
         "description": "Label for auto-align checkbox."
+    },
+    "openFullScreen": {
+        "message": "開啟全螢幕",
+        "description": "Button to open editor in a new tab."
     }
 }
