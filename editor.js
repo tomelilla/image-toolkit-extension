@@ -57,6 +57,13 @@ document.addEventListener('DOMContentLoaded', async () => {
              btn.classList.add('active');
              const tabId = btn.getAttribute('data-tab');
              document.getElementById(`tab-${tabId}`).classList.add('active');
+
+             // Toggle Cropper based on tab
+             if (tabId === 'crop') {
+                 initCropper();
+             } else {
+                 destroyCropper();
+             }
         });
     });
 
@@ -92,6 +99,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     let cropper = null;
     let isRoundCrop = false;
 
+    // Helper to init cropper
+    function initCropper() {
+        if (!uploadedImage || cropper) return; // Don't re-init or init if no image
+
+        cropper = new Cropper(originalImage, {
+            viewMode: 1,
+            autoCrop: true,
+        });
+
+        cropToolsContainer.style.display = 'block';
+        const cropMessage = document.getElementById('cropMessage');
+        if (cropMessage) cropMessage.style.display = 'none';
+        btnCropFree.classList.add('active');
+    }
+
     // Helper to reset cropper
     function destroyCropper() {
         if (cropper) {
@@ -124,15 +146,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             scaleWidthInput.placeholder = uploadedImage.naturalWidth;
             scaleHeightInput.placeholder = uploadedImage.naturalHeight;
 
-            // Init Cropper
-            cropper = new Cropper(originalImage, {
-                viewMode: 1,
-                autoCrop: true,
-            });
-            cropToolsContainer.style.display = 'block';
-            const cropMessage = document.getElementById('cropMessage');
-            if (cropMessage) cropMessage.style.display = 'none';
-            btnCropFree.classList.add('active');
+            // Conditional Init Cropper (only if on crop tab)
+            if (document.querySelector('.tab-btn[data-tab="crop"]').classList.contains('active')) {
+                initCropper();
+            }
         };
         uploadedImage.src = dataURL;
     }
