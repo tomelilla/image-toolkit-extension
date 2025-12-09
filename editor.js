@@ -67,9 +67,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    let uploadedImage = null; // Stores the image data
+    let uploadedImagesList = []; // Array to store multiple images
+    let currentIndex = -1;
+    let uploadedImage = null; // Stores the currently selected image data
     let uploadedStitchImages = []; // Stores images for stitching
     let currentImageMetadata = null; // Store metadata for re-localization
+    const imageListContainer = document.getElementById('imageListContainer');
+    const dropZone = document.getElementById('dropZone'); // The add button
+    const outputInfo = document.getElementById('outputInfo');
 
     // Helper to format file size
     function formatFileSize(bytes) {
@@ -150,15 +155,84 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (document.querySelector('.tab-btn[data-tab="crop"]').classList.contains('active')) {
                 initCropper();
             }
+            btnCropFree.classList.add('active');
         };
         uploadedImage.src = dataURL;
     }
+
+    // Add Image to List and Select
+    function addImageToList(dataUrl, name, sizeStr, fileObj = null) {
+        const imgObj = {
+            dataUrl: dataUrl,
+            name: name,
+            sizeStr: sizeStr,
+            file: fileObj
+        };
+
+        // Wait for dimensionality
+        const tempImg = new Image();
+        tempImg.onload = () => {
+            imgObj.width = tempImg.naturalWidth;
+            imgObj.height = tempImg.naturalHeight;
+
+            uploadedImagesList.push(imgObj);
+            const index = uploadedImagesList.length - 1;
+
+            renderThumbnail(imgObj, index);
+
+            // Auto Select if it's the first one, or maybe always?
+            // User requirement: "Original image defaults to showing the first one. Clicking other images switches display"
+            // So if it's the first one, select it. If appending, maybe don't auto-switch unless user wants?
+            // "Last one is add more... Default shows first one" -> Implementation: If list was empty, select 0.
+            if (uploadedImagesList.length === 1) {
+                selectImage(0);
+            }
+        };
+        tempImg.src = dataUrl;
+    }
+
+    function renderThumbnail(imgObj, index) {
+        const thumb = document.createElement('div');
+        thumb.className = 'image-list-item';
+        thumb.dataset.index = index;
+
+        const img = document.createElement('img');
+        img.src = imgObj.dataUrl;
+
+        thumb.appendChild(img);
+
+        thumb.addEventListener('click', () => {
+            selectImage(index);
+        });
+
+        // Insert before the dropZone (add button)
+        imageListContainer.insertBefore(thumb, dropZone);
+    }
+
+    function selectImage(index) {
+        if (index < 0 || index >= uploadedImagesList.length) return;
+
+        currentIndex = index;
+
+        // Update UI Highlights
+        document.querySelectorAll('.image-list-item').forEach(item => {
+            if (item.classList.contains('add-btn')) return;
+            item.classList.remove('selected');
+            if (parseInt(item.dataset.index) === index) {
+                item.classList.add('selected');
+            }
+        });
+
+        const item = uploadedImagesList[index];
+        loadImageFromDataURL(item.dataUrl, item.name, item.sizeStr);
+    }
+
 
     // Check for pending image from Popup
     chrome.storage.local.get(['pendingImage'], (result) => {
         if (result.pendingImage) {
             const { dataUrl, name, sizeStr } = result.pendingImage;
-            loadImageFromDataURL(dataUrl, name, sizeStr);
+            addImageToList(dataUrl, name, sizeStr);
             // Clear storage
             chrome.storage.local.remove('pendingImage');
         }
@@ -166,15 +240,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Handle image upload (Directly in Editor)
     imageUpload.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            handleFile(file);
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            Array.from(files).forEach(file => handleFile(file));
         }
+        // Reset input so same file can be selected again
+        event.target.value = '';
     });
 
-    // Drag and Drop Logic
-    const dropZone = document.getElementById('dropZone');
+    // Drag & Drop logic .... (Keep existing but update handleFile call)
+    // ...
 
+
+    // Drag and Drop Logic
+    // dropZone is already defined in updated scope
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropZone.addEventListener(eventName, preventDefaults, false);
     });
@@ -210,19 +289,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function handleFiles(files) {
         if (files.length > 0) {
-            const file = files[0];
-            if (file.type.startsWith('image/')) {
-                handleFile(file);
-            } else {
-                alert('Please upload an image file.');
-            }
+             Array.from(files).forEach(file => {
+                 if (file.type.startsWith('image/')) {
+                     handleFile(file);
+                 }
+             });
         }
     }
 
     function handleFile(file) {
          const reader = new FileReader();
          reader.onload = (e) => {
-             loadImageFromDataURL(e.target.result, file.name, formatFileSize(file.size));
+             addImageToList(e.target.result, file.name, formatFileSize(file.size), file);
          };
          reader.readAsDataURL(file);
     }
@@ -459,5 +537,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         downloadLink.href = dataURL;
         downloadLink.style.display = 'block';
         outputCanvas.style.display = 'none'; // Hide canvas if image is directly displayed
+
+        // Calculate Stats
+        const i = new Image();
+        i.onload = () => {
+             // Rough size calc from base64 (remove header)
+             const base64str = dataURL.split(',')[1];
+             const decodedSize = window.atob(base64str).length;
+             const sizeStr = formatFileSize(decodedSize);
+             const width = i.naturalWidth;
+             const height = i.naturalHeight;
+
+             // "Size: %s, Dimensions: %s x %s"
+             outputInfo.textContent = I18nManager.getMessage('outputStats')
+                 .replace('%s', sizeStr)
+                 .replace('%s', width)
+                 .replace('%s', height);
+        };
+        i.src = dataURL;
     }
 });

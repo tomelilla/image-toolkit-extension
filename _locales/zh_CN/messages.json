@@ -162,5 +162,9 @@
     "dropZoneText": {
         "message": "或将图片拖拽至此",
         "description": "Text instructing user to drag and drop image."
+    },
+    "outputStats": {
+        "message": "大小: %s, 尺寸: %s x %s",
+        "description": "Format string for output image stats: Size, Width, Height"
     }
 }

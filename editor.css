@@ -13,28 +13,81 @@ body {
     max-height: 80vh;
 }
 
-/* Drop Zone Styles */
-#dropZone {
-    border: 2px dashed #ccc;
-    border-radius: 10px;
-    background: #fafafa;
-    text-align: center;
-    transition: all 0.3s ease;
-    padding: 30px;
+/* Image List Styles */
+.image-list-container {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    align-items: center;
 }
 
-#dropZone.drag-over {
-    background: #e9f7ef;
+.image-list-item {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.2s;
+    background: #fff;
+}
+
+.image-list-item:hover {
+    border-color: #bbb;
+}
+
+.image-list-item.selected {
     border-color: #4CAF50;
-    transform: scale(1.02);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.image-list-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Add Button / Mini Drop Zone */
+#dropZone {
+    border: 2px dashed #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0; /* Override old padding */
+    background: #fff;
+}
+
+#dropZone:hover, #dropZone.drag-over {
+    border-color: #4CAF50;
+    background: #f0fdf4;
+    color: #4CAF50;
 }
 
 .upload-label {
     cursor: pointer;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
+    margin: 0;
+    color: #888;
 }
+
+.sub-text {
+    display: none; /* Hide drag text in mini view */
+}
+
 
 
 /* Tab Navigation Styles */

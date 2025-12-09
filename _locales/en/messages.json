@@ -174,5 +174,9 @@
     "dropZoneText": {
         "message": "or Drag and Drop image here",
         "description": "Text instructing user to drag and drop image."
+    },
+    "outputStats": {
+        "message": "Size: %s, Dimensions: %s x %s",
+        "description": "Format string for output image stats: Size, Width, Height"
     }
 }

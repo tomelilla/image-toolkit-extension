@@ -162,5 +162,9 @@
     "dropZoneText": {
         "message": "または画像をここにドラッグ＆ドロップ",
         "description": "Text instructing user to drag and drop image."
+    },
+    "outputStats": {
+        "message": "サイズ: %s, 寸法: %s x %s",
+        "description": "Format string for output image stats: Size, Width, Height"
     }
 }

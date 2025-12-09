@@ -24,19 +24,23 @@
 
     <h1>__MSG_imageToolkitTitle__</h1>
 
-    <div class="input-section"
-         id="dropZone">
-        <label for="imageUpload"
-               class="upload-label">
-            <p style="font-size: 24px; margin: 10px 0;">📁</p>
-            <span style="font-weight: bold; font-size: 1.1em;">__MSG_uploadImageLabel__</span>
-            <p class="sub-text"
-               style="color: #666; margin-top: 5px;">__MSG_dropZoneText__</p>
-        </label>
-        <input type="file"
-               id="imageUpload"
-               accept="image/*"
-               style="display:none">
+    <!-- Image List Channel -->
+    <div id="imageListContainer"
+         class="image-list-container">
+        <!-- Image thumbnails will be appended here -->
+        <div class="image-list-item add-btn"
+             id="dropZone">
+            <label for="imageUpload"
+                   class="upload-label">
+                <div style="font-size: 20px;">+</div>
+                <div style="font-size: 12px;">__MSG_uploadImageLabel__</div>
+            </label>
+            <input type="file"
+                   id="imageUpload"
+                   accept="image/*"
+                   multiple
+                   style="display:none">
+        </div>
     </div>
 
     <div class="image-display-section">
@@ -147,23 +151,26 @@
                 <button id="stitchImages">__MSG_stitchButton__</button>
             </div>
         </div>
+    </div>
 
-        <div class="output-section">
-            <h2>__MSG_outputImageSectionTitle__</h2>
-            <canvas id="outputCanvas"
-                    style="max-width: 100%; border: 1px solid #ccc; display: none;"></canvas>
-            <img id="outputImage"
-                 src="#"
-                 alt="__MSG_outputImageSectionTitle__"
-                 style="max-width: 100%; display: none;">
-            <a id="downloadLink"
-               download="processed_image.png"
-               style="display: none;">__MSG_downloadImageLink__</a>
-        </div>
+    <div class="output-section">
+        <h2>__MSG_outputImageSectionTitle__</h2>
+        <canvas id="outputCanvas"
+                style="max-width: 100%; border: 1px solid #ccc; display: none;"></canvas>
+        <img id="outputImage"
+             src="#"
+             alt="__MSG_outputImageSectionTitle__"
+             style="max-width: 100%; display: none;">
+        <p id="outputInfo"
+           style="margin-top: 10px; font-weight: bold; color: #555;"></p>
+        <a id="downloadLink"
+           download="processed_image.png"
+           style="display: none;">__MSG_downloadImageLink__</a>
+    </div>
 
-        <script src="libs/cropper.min.js"></script>
-        <script src="libs/i18n-manager.js"></script>
-        <script src="editor.js"></script>
+    <script src="libs/cropper.min.js"></script>
+    <script src="libs/i18n-manager.js"></script>
+    <script src="editor.js"></script>
 </body>
 
 </html>
