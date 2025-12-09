@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const removeBackgroundBtn = document.getElementById('removeBackground');
 
     const stitchDirectionSelect = document.getElementById('stitchDirection');
+    const autoAlignCheckbox = document.getElementById('autoAlignStitch');
     const stitchImagesBtn = document.getElementById('stitchImages');
 
     const compressFormatSelect = document.getElementById('compressFormat');
@@ -481,7 +482,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const direction = stitchDirectionSelect.value;
-        const imagesToStitch = [];
+        const autoAlign = autoAlignCheckbox.checked;
 
         // Load all images
         const loadPromises = uploadedImagesList.map(item => {
@@ -494,45 +495,271 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const loadedImages = await Promise.all(loadPromises);
 
+        // 1. Normalize Dimensions
+        // Horizontal: Height matches MaxHeight
+        // Vertical: Width matches MaxWidth
+        // We will store "draw dimensions" for each image
+        const normalizedImages = [];
+
+        let targetDimension = 0;
+
+        if (direction === 'horizontal') {
+            targetDimension = Math.max(...loadedImages.map(img => img.naturalHeight));
+             loadedImages.forEach(img => {
+                const scale = targetDimension / img.naturalHeight;
+                normalizedImages.push({
+                    img: img,
+                    width: img.naturalWidth * scale,
+                    height: targetDimension // Same height
+                });
+            });
+        } else {
+             targetDimension = Math.max(...loadedImages.map(img => img.naturalWidth));
+             loadedImages.forEach(img => {
+                const scale = targetDimension / img.naturalWidth;
+                normalizedImages.push({
+                    img: img,
+                    width: targetDimension, // Same width
+                    height: img.naturalHeight * scale
+                });
+            });
+        }
+
+        // 2. Calculate Offsets (Auto Align)
+        // If autoAlign is true, we calculate overlap for each adjacent pair
+        const overlaps = [0]; // First image has 0 overlap with specific predecessor
+
+        if (autoAlign) {
+            // Create a temp canvas for pixel analysis
+            const tCanvas = document.createElement('canvas');
+            const tCtx = tCanvas.getContext('2d');
+
+            // Note: Since we need pixel data, we must draw them at normalised size or original?
+            // Better to analyze at normalised size to match the output.
+
+            // To be efficient, we only check max 20% overlap or fixed px?
+            // Let's check max 300px or 20%
+
+            for (let i = 1; i < normalizedImages.length; i++) {
+                const prev = normalizedImages[i-1];
+                const curr = normalizedImages[i];
+
+                // We need to draw the relevant parts to tCanvas to get ImageData
+                // Horizontal: Prev Right edge vs Curr Left edge
+                // Vertical: Prev Bottom edge vs Curr Top edge
+
+                let overlap = 0;
+
+                if (direction === 'vertical') {
+                    // Resize temp canvas to width: targetDimension, height: searchRange * 2
+                    // Search range: min(prev.height, curr.height) * 0.3
+                    const searchH = Math.min(prev.height, curr.height) * 0.3;
+                    const w = targetDimension;
+
+                    tCanvas.width = w;
+                    tCanvas.height = searchH * 2; // Enough for both strips
+
+                    // Draw Prev Bottom
+                    tCtx.drawImage(prev.img, 0, 0, prev.img.naturalWidth, prev.img.naturalHeight,
+                                   0, 0, prev.width, prev.height);
+                    const prevData = tCtx.getImageData(0, prev.height - searchH, w, searchH);
+
+                    // Draw Curr Top
+                    tCtx.clearRect(0, 0, w, searchH * 2);
+                    tCtx.drawImage(curr.img, 0, 0, curr.img.naturalWidth, curr.img.naturalHeight,
+                                   0, 0, curr.width, curr.height);
+                    const currData = tCtx.getImageData(0, 0, w, searchH);
+
+                    overlap = calculateBestOverlap(prevData, currData, w, searchH, 'vertical');
+
+                } else {
+                    // Horizontal
+                     const searchW = Math.min(prev.width, curr.width) * 0.3;
+                     const h = targetDimension;
+
+                     tCanvas.width = searchW * 2;
+                     tCanvas.height = h;
+
+                     // Prev Right
+                     tCtx.drawImage(prev.img, 0, 0, prev.img.naturalWidth, prev.img.naturalHeight,
+                                    0, 0, prev.width, prev.height);
+                     const prevData = tCtx.getImageData(prev.width - searchW, 0, searchW, h);
+
+                     // Curr Left
+                     tCtx.clearRect(0,0, searchW*2, h);
+                     tCtx.drawImage(curr.img, 0, 0, curr.img.naturalWidth, curr.img.naturalHeight,
+                                    0, 0, curr.width, curr.height);
+                     const currData = tCtx.getImageData(0, 0, searchW, h);
+
+                     overlap = calculateBestOverlap(prevData, currData, searchW, h, 'horizontal');
+                }
+
+                overlaps.push(overlap);
+            }
+        } else {
+            // Fill 0s
+            for(let i=1; i<normalizedImages.length; i++) overlaps.push(0);
+        }
+
+        // 3. Render Final Canvas
         let totalWidth = 0;
         let totalHeight = 0;
-        let maxWidth = 0;
-        let maxHeight = 0;
 
-        // Calculate total dimensions
         if (direction === 'horizontal') {
-            for (const img of loadedImages) {
-                totalWidth += img.naturalWidth;
-                maxHeight = Math.max(maxHeight, img.naturalHeight);
-            }
-            totalHeight = maxHeight;
-        } else { // vertical
-            for (const img of loadedImages) {
-                totalHeight += img.naturalHeight;
-                maxWidth = Math.max(maxWidth, img.naturalWidth);
-            }
-            totalWidth = maxWidth;
+            totalHeight = targetDimension;
+            normalizedImages.forEach((img, i) => {
+                totalWidth += img.width;
+                if (i > 0) totalWidth -= overlaps[i];
+            });
+        } else {
+            totalWidth = targetDimension;
+             normalizedImages.forEach((img, i) => {
+                totalHeight += img.height;
+                if (i > 0) totalHeight -= overlaps[i];
+            });
         }
 
         outputCanvas.width = totalWidth;
         outputCanvas.height = totalHeight;
         ctx.clearRect(0, 0, totalWidth, totalHeight);
 
-        let currentX = 0;
-        let currentY = 0;
+        let currentPos = 0;
+        normalizedImages.forEach((img, i) => {
+             const overlap = overlaps[i] || 0;
+             // Subtract overlap from currentPos before drawing?
+             // No, draw at currentPos, then increment by (width - overlap) for next.
+             // Wait, if overlap is 50, we draw Img2 starting 50px EARLIER.
+             // So currentPos should decrement by overlap.
 
-        for (const img of loadedImages) {
-            if (direction === 'horizontal') {
-                ctx.drawImage(img, currentX, 0, img.naturalWidth, maxHeight);
-                currentX += img.naturalWidth;
-            } else { // vertical
-                ctx.drawImage(img, 0, currentY, maxWidth, img.naturalHeight);
-                currentY += img.naturalHeight;
-            }
-        }
+             if (i > 0) currentPos -= overlap;
+
+             if (direction === 'horizontal') {
+                 // ctx.drawImage(img src, dstX, dstY, dstW, dstH)
+                ctx.drawImage(img.img, 0, 0, img.img.naturalWidth, img.img.naturalHeight,
+                              currentPos, 0, img.width, img.height);
+                currentPos += img.width;
+             } else {
+                ctx.drawImage(img.img, 0, 0, img.img.naturalWidth, img.img.naturalHeight,
+                              0, currentPos, img.width, img.height);
+                currentPos += img.height;
+             }
+        });
 
         displayProcessedImage(outputCanvas.toDataURL());
     });
+
+    // Simple Overlap Detection (MSE)
+    function calculateBestOverlap(prevData, currData, w, h, direction) {
+        // We shift currData "into" prevData (or vice versa) and find min diff
+        // Max overlap to check is determined by input data size (search range)
+        // We will check shifts from 0 to h (vertical) or 0 to w (horizontal)
+
+        let minError = Infinity;
+        let bestOffset = 0;
+        const pData = prevData.data;
+        const cData = currData.data;
+
+        // Stride is 4 (RGBA)
+        // Optimization: Check every Nth pixel or row/col to speed up?
+        // Let's do a fairly naive scan but maybe step 2 or 4 pixels for speed if needed.
+        // Given Chrome V8 speed, full scan of reasonable size (e.g. 500x100) is fast.
+
+        const limit = direction === 'vertical' ? h : w;
+
+        // Scan each possible overlap amount (offset)
+        // Offset = 0 means no overlap check (start of curr touches end of prev) -- wait, we want to find overlap.
+        // We assume curr's TOP overlaps with prev's BOTTOM.
+        // So we compare prev's [Height - k] row with curr's [0] row... up to prev's [Height] with curr's [k].
+        // Actually, we are comparing a strip.
+        // We compare prevData (Bottom Strip) with currData (Top Strip).
+        // If overlap is 10px, it means prevData's last 10px match currData's first 10px.
+
+        // Let's iterate 'k' pixels of overlap
+        // Range: 10 pixels to limit/2 ? or full limit?
+        // Let's require at least 10px overlap to be "confident" and avoid false positives on 1px lines.
+
+        for (let k = 5; k < limit; k++) {
+             // Calculate error for overlap 'k'
+             let error = 0;
+             let count = 0;
+
+             // We compare:
+             // Prev: Row (h - k) to (h)
+             // Curr: Row 0 to k
+
+             // BUT checking area is costly. Let's check a few scanlines?
+             // Let's check the whole area of overlap.
+
+             // For Vertical:
+             // Prev Pixel at (x, h-k+y) compare with Curr Pixel at (x, y)
+             // where y goes from 0 to k
+
+             if (direction === 'vertical') {
+                 // Optimization: Only check the exact line if we assume perfect vertical shift?
+                 // No, usually screenshots have some content.
+                 // Checking full block is safer.
+
+                 // If k is large, this loop is O(k * w * k) -> O(w*k^2).
+                 // If w=1000, k=200, 1000*40000 = 40M ops. A bit heavy for UI thread?
+                 // Let's sample 10 columns.
+
+                 const stepX = Math.floor(w / 10) || 1;
+
+                 for (let y = 0; y < k; y++) {
+                     for (let x = 0; x < w; x += stepX) {
+                         // Prev index
+                         // Row: h - k + y
+                         const pIdx = ((h - k + y) * w + x) * 4;
+                         const cIdx = (y * w + x) * 4;
+
+                         const rD = pData[pIdx] - cData[cIdx];
+                         const gD = pData[pIdx+1] - cData[cIdx+1];
+                         const bD = pData[pIdx+2] - cData[cIdx+2];
+                         // const aD = pData[pIdx+3] - cData[cIdx+3]; // Ignore alpha diffs?
+
+                         error += (rD*rD + gD*gD + bD*bD);
+                         count++;
+                     }
+                 }
+             } else {
+                 // Horizontal
+                 // Compare Prev Col (w-k+x) with Curr Col (x)
+                 const stepY = Math.floor(h / 10) || 1;
+
+                  for (let x = 0; x < k; x++) {
+                     for (let y = 0; y < h; y += stepY) {
+                          // Prev: col w-k+x
+                          const pIdx = (y * w + (w - k + x)) * 4;
+                          const cIdx = (y * w + x) * 4;
+
+                         const rD = pData[pIdx] - cData[cIdx];
+                         const gD = pData[pIdx+1] - cData[cIdx+1];
+                         const bD = pData[pIdx+2] - cData[cIdx+2];
+                         error += (rD*rD + gD*gD + bD*bD);
+                         count++;
+                     }
+                  }
+             }
+
+             if (count > 0) {
+                 const mse = error / count;
+                 // Dynamic threshold? Or just find min?
+                 // Find local minimum that is "good enough"?
+                 // Simple approach: global min.
+                 if (mse < minError) {
+                     minError = mse;
+                     bestOffset = k;
+                 }
+             }
+        }
+
+        // Threshold check: If minError is massive, maybe it's not an overlap?
+        // MSE for identical is 0. For JPEG artifacts, maybe < 50-100?
+        // 255^2 = 65000. 100 is very small.
+        if (minError > 500) return 0; // No good match found
+
+        return bestOffset;
+    }
 
     // Helper function to display processed image
     function displayProcessedImage(dataURL) {

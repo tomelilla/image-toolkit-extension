@@ -198,5 +198,9 @@
     "formatWEBP": {
         "message": "WebP",
         "description": "Option for WebP format."
+    },
+    "enableAutoAlign": {
+        "message": "自動移除重疊 (智慧拼接)",
+        "description": "Label for auto-align checkbox."
     }
 }

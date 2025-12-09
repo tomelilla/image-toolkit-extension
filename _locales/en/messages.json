@@ -198,5 +198,9 @@
     "formatWEBP": {
         "message": "WebP",
         "description": "Option for WebP format."
+    },
+    "enableAutoAlign": {
+        "message": "Auto-remove (Smart Stitch)",
+        "description": "Label for auto-align checkbox."
     }
 }
