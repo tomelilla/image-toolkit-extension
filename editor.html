@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>__MSG_imageToolkitTitle__</title>
+    <link rel="stylesheet"
+          href="popup.css">
+    <link rel="stylesheet"
+          href="libs/cropper.min.css">
+</head>
+
+<body>
+    <div style="position: absolute; top: 10px; right: 10px;">
+        <select id="languageSelector">
+            <option value="en">English</option>
+            <option value="zh_TW">繁體中文</option>
+            <option value="zh_CN">简体中文</option>
+            <option value="ja">日本語</option>
+        </select>
+    </div>
+
+    <h1>__MSG_imageToolkitTitle__</h1>
+
+    <div class="input-section">
+        <label for="imageUpload">__MSG_uploadImageLabel__</label>
+        <input type="file"
+               id="imageUpload"
+               accept="image/*">
+    </div>
+
+    <div class="image-display-section">
+        <h2>__MSG_originalImageSectionTitle__</h2>
+        <div class="img-container">
+            <img id="originalImage"
+                 src="#"
+                 alt="__MSG_originalImageSectionTitle__"
+                 style="max-width: 100%; display: none;">
+        </div>
+        <p id="imageInfo"></p>
+    </div>
+
+    <div class="tools-section">
+        <h2>__MSG_toolsSectionTitle__</h2>
+        <div class="tool-item">
+            <div class="tool-item">
+                <h3>__MSG_imageScalingTitle__</h3>
+                <div class="scaling-options">
+                    <input type="number"
+                           id="scalePercentage"
+                           placeholder="__MSG_percentagePlaceholder__"> %
+                    <span>__MSG_orText__</span>
+                    <input type="number"
+                           id="scaleWidth"
+                           placeholder="__MSG_widthPlaceholder__"> x
+                    <input type="number"
+                           id="scaleHeight"
+                           placeholder="__MSG_heightPlaceholder__"> px
+                </div>
+                <button id="scaleImage">__MSG_scaleButton__</button>
+            </div>
+            <div class="tool-item">
+                <h3>__MSG_imageCompressionTitle__</h3>
+                <input type="number"
+                       id="compressQuality"
+                       placeholder="__MSG_qualityPlaceholder__"
+                       min="0"
+                       max="100"
+                       value="80">
+                <button id="compressImage">__MSG_compressButton__</button>
+            </div>
+            <div class="tool-item"
+                 id="cropToolsContainer"
+                 style="display:none;">
+                <h3>__MSG_imageCroppingTitle__</h3>
+                <div class="crop-options">
+                    <button id="btnCropFree"
+                            class="crop-mode-btn">__MSG_cropFree__</button>
+                    <button id="btnCropSquare"
+                            class="crop-mode-btn">__MSG_cropSquare__</button>
+                    <button id="btnCrop169"
+                            class="crop-mode-btn">__MSG_crop169__</button>
+                    <button id="btnCropRound"
+                            class="crop-mode-btn">__MSG_cropRound__</button>
+                </div>
+                <button id="cropImage">__MSG_cropButton__</button>
+            </div>
+            <div class="tool-item">
+                <h3>__MSG_imageBackgroundRemovalTitle__</h3>
+                <button id="removeBackground">__MSG_removeBackgroundButton__</button>
+            </div>
+            <div class="tool-item">
+                <h3>__MSG_imageStitchingTitle__</h3>
+                <p>__MSG_uploadMultipleImagesForStitchingText__</p>
+                <label for="imageUploadStitch">__MSG_uploadImagesForStitchingLabel__</label>
+                <input type="file"
+                       id="imageUploadStitch"
+                       accept="image/*"
+                       multiple>
+                <select id="stitchDirection">
+                    <option value="horizontal">__MSG_horizontalOption__</option>
+                    <option value="vertical">__MSG_verticalOption__</option>
+                </select>
+                <button id="stitchImages">__MSG_stitchButton__</button>
+            </div>
+        </div>
+
+        <div class="output-section">
+            <h2>__MSG_outputImageSectionTitle__</h2>
+            <canvas id="outputCanvas"
+                    style="max-width: 100%; border: 1px solid #ccc; display: none;"></canvas>
+            <img id="outputImage"
+                 src="#"
+                 alt="__MSG_outputImageSectionTitle__"
+                 style="max-width: 100%; display: none;">
+            <a id="downloadLink"
+               download="processed_image.png"
+               style="display: none;">__MSG_downloadImageLink__</a>
+        </div>
+
+        <script src="libs/cropper.min.js"></script>
+        <script src="libs/i18n-manager.js"></script>
+        <script src="editor.js"></script>
+</body>
+
+</html>

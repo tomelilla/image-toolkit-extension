@@ -1,0 +1,165 @@
+{
+    "extensionName": {
+        "message": "画像ツールキット",
+        "description": "Name of the extension."
+    },
+    "extensionDescription": {
+        "message": "画像操作（分析、拡大縮小、圧縮、トリミング、背景除去、結合）のための Chrome 拡張機能。",
+        "description": "Description of the extension."
+    },
+    "imageToolkitTitle": {
+        "message": "画像ツールキット",
+        "description": "Main title of the popup."
+    },
+    "uploadImageLabel": {
+        "message": "画像をアップロード：",
+        "description": "Label for image upload input."
+    },
+    "originalImageSectionTitle": {
+        "message": "元の画像",
+        "description": "Title for original image section."
+    },
+    "toolsSectionTitle": {
+        "message": "ツール",
+        "description": "Title for tools section."
+    },
+    "imageAnalysisTitle": {
+        "message": "画像分析",
+        "description": "Title for image analysis tool."
+    },
+    "analyzeButton": {
+        "message": "分析",
+        "description": "Button text for image analysis."
+    },
+    "proportionalScalingTitle": {
+        "message": "比率スケーリング",
+        "description": "Title for proportional scaling tool."
+    },
+    "percentagePlaceholder": {
+        "message": "パーセンテージ (例: 50)",
+        "description": "Placeholder for percentage input."
+    },
+    "scaleButton": {
+        "message": "スケール",
+        "description": "Button text for image scaling."
+    },
+    "imageCompressionTitle": {
+        "message": "画像圧縮",
+        "description": "Title for image compression tool."
+    },
+    "qualityPlaceholder": {
+        "message": "品質 (0-100)",
+        "description": "Placeholder for quality input."
+    },
+    "compressButton": {
+        "message": "圧縮",
+        "description": "Button text for image compression."
+    },
+    "imageCroppingTitle": {
+        "message": "画像トリミング",
+        "description": "Title for image cropping tool."
+    },
+    "cropXLabel": {
+        "message": "X座標：",
+        "description": "Label for crop X coordinate."
+    },
+    "cropYLabel":
+    {
+        "message": "Y座標：",
+        "description": "Label for crop Y coordinate."
+    },
+    "cropWidthLabel":
+    {
+        "message": "幅：",
+        "description": "Label for crop width."
+    },
+    "cropHeightLabel":
+    {
+        "message": "高さ：",
+        "description": "Label for crop height."
+    },
+    "cropButton": {
+        "message": "トリミング",
+        "description": "Button text for image cropping."
+    },
+    "imageBackgroundRemovalTitle": {
+        "message": "画像背景除去",
+        "description": "Title for image background removal tool."
+    },
+    "removeBackgroundButton": {
+        "message": "背景を除去",
+        "description": "Button text for background removal."
+    },
+    "imageStitchingTitle": {
+        "message": "画像結合",
+        "description": "Title for image stitching tool."
+    },
+    "uploadMultipleImagesForStitchingText": {
+        "message": "複数の画像をアップロードして結合します。",
+        "description": "Instruction text for stitching."
+    },
+    "uploadImagesForStitchingLabel": {
+        "message": "結合する画像をアップロード：",
+        "description": "Label for stitching image upload."
+    },
+    "horizontalOption": {
+        "message": "水平",
+        "description": "Option for horizontal stitching."
+    },
+    "verticalOption": {
+        "message": "垂直",
+        "description": "Option for vertical stitching."
+    },
+    "stitchButton": {
+        "message": "結合",
+        "description": "Button text for image stitching."
+    },
+    "outputImageSectionTitle": {
+        "message": "出力画像",
+        "description": "Title for output image section."
+    },
+    "downloadImageLink": {
+        "message": "画像をダウンロード",
+        "description": "Text for download link."
+    },
+    "pleaseUploadImageFirst": {
+        "message": "まず画像をアップロードしてください。",
+        "description": "Alert message when no image is uploaded."
+    },
+    "enterValidPercentage": {
+        "message": "有効なパーセンテージを入力してください。",
+        "description": "Alert message for invalid percentage input."
+    },
+    "croppingFeatureNotImplemented": {
+        "message": "トリミング機能はまだ実装されていません。画像上で領域を選択してください。",
+        "description": "Alert message for cropping."
+    },
+    "backgroundRemovalComplex": {
+        "message": "背景除去は複雑な機能であり、まだ実装されていません。",
+        "description": "Alert message for background removal."
+    },
+    "atLeastTwoImagesForStitching": {
+        "message": "結合するには少なくとも2つの画像をアップロードしてください。",
+        "description": "Alert message for stitching without enough images."
+    },
+    "imagesLoadedForStitching": {
+        "message": "枚の画像が読み込まれました。",
+        "description": "Alert message for successful image loading for stitching. Preceded by a number."
+    },
+    "enterValidQuality": {
+        "message": "有効な品質 (0-100) を入力してください。",
+        "description": "Alert message for invalid quality input."
+    },
+    "enterValidCropCoordinates": {
+        "message": "有効なトリミング座標と寸法を入力してください。",
+        "description": "Alert message for invalid crop coordinates."
+    },
+    "cropAreaExceedsBoundaries": {
+        "message": "トリミング領域が画像の境界を超えています。",
+        "description": "Alert message for crop area out of bounds."
+    },
+    "imageInfoText": {
+        "message": "ファイル名：%s、拡張子：%s、幅：%s、高さ：%s",
+        "description": "Image information text. Placeholders for filename, extension, width, height."
+    }
+}

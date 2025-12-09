@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>__MSG_imageToolkitTitle__</title>
+    <link rel="stylesheet"
+          href="popup.css">
+</head>
+
+<body style="width: 300px; padding: 20px;">
+    <h1>__MSG_imageToolkitTitle__</h1>
+
+    <div class="input-section"
+         style="margin-top: 20px; text-align: center;">
+        <label for="imageUpload"
+               style="cursor: pointer; padding: 20px; border: 2px dashed #ccc; display: block; background: #fafafa;">
+            <p>📁</p>
+            __MSG_uploadImageLabel__
+        </label>
+        <input type="file"
+               id="imageUpload"
+               accept="image/*"
+               style="display: none;">
+    </div>
+
+    <script src="libs/i18n-manager.js"></script>
+    <script src="popup.js"></script>
+</body>
+
+</html>

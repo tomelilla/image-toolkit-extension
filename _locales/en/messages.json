@@ -1,0 +1,174 @@
+{
+    "extensionName": {
+        "message": "Image Toolkit",
+        "description": "Name of the extension."
+    },
+    "extensionDescription": {
+        "message": "A Chrome extension for image manipulation (analysis, scaling, compression, cropping, background removal, stitching).",
+        "description": "Description of the extension."
+    },
+    "imageToolkitTitle": {
+        "message": "Image Toolkit",
+        "description": "Main title of the popup."
+    },
+    "uploadImageLabel": {
+        "message": "Upload Image:",
+        "description": "Label for image upload input."
+    },
+    "originalImageSectionTitle": {
+        "message": "Original Image",
+        "description": "Title for original image section."
+    },
+    "toolsSectionTitle": {
+        "message": "Tools",
+        "description": "Title for tools section."
+    },
+    "imageAnalysisTitle": {
+        "message": "Image Analysis",
+        "description": "Title for image analysis tool."
+    },
+    "analyzeButton": {
+        "message": "Analyze",
+        "description": "Button text for image analysis."
+    },
+    "imageScalingTitle": {
+        "message": "Image Scaling",
+        "description": "Title for image scaling tool."
+    },
+    "percentagePlaceholder": {
+        "message": "Percentage",
+        "description": "Placeholder for percentage input."
+    },
+    "orText": {
+        "message": "OR",
+        "description": "Text for 'or' separator."
+    },
+    "widthPlaceholder": {
+        "message": "W",
+        "description": "Placeholder for width input."
+    },
+    "heightPlaceholder": {
+        "message": "H",
+        "description": "Placeholder for height input."
+    },
+    "scaleButton": {
+        "message": "Scale",
+        "description": "Button text for image scaling."
+    },
+    "imageCompressionTitle": {
+        "message": "Image Compression",
+        "description": "Title for image compression tool."
+    },
+    "qualityPlaceholder": {
+        "message": "Quality (0-100)",
+        "description": "Placeholder for quality input."
+    },
+    "compressButton": {
+        "message": "Compress",
+        "description": "Button text for image compression."
+    },
+    "imageCroppingTitle": {
+        "message": "Image Cropping",
+        "description": "Title for image cropping tool."
+    },
+    "cropFree": {
+        "message": "Free",
+        "description": "Button for free crop mode."
+    },
+    "cropSquare": {
+        "message": "Square (1:1)",
+        "description": "Button for square crop mode."
+    },
+    "crop169": {
+        "message": "16:9",
+        "description": "Button for 16:9 crop mode."
+    },
+    "cropRound": {
+        "message": "Round",
+        "description": "Button for round crop mode."
+    },
+    "cropButton": {
+        "message": "Crop",
+        "description": "Button text for image cropping."
+    },
+    "imageBackgroundRemovalTitle": {
+        "message": "Image Background Removal",
+        "description": "Title for image background removal tool."
+    },
+    "removeBackgroundButton": {
+        "message": "Remove Background",
+        "description": "Button text for background removal."
+    },
+    "imageStitchingTitle": {
+        "message": "Image Stitching",
+        "description": "Title for image stitching tool."
+    },
+    "uploadMultipleImagesForStitchingText": {
+        "message": "Upload multiple images for stitching.",
+        "description": "Instruction text for stitching."
+    },
+    "uploadImagesForStitchingLabel": {
+        "message": "Upload Images for Stitching:",
+        "description": "Label for stitching image upload."
+    },
+    "horizontalOption": {
+        "message": "Horizontal",
+        "description": "Option for horizontal stitching."
+    },
+    "verticalOption": {
+        "message": "Vertical",
+        "description": "Option for vertical stitching."
+    },
+    "stitchButton": {
+        "message": "Stitch",
+        "description": "Button text for image stitching."
+    },
+    "outputImageSectionTitle": {
+        "message": "Output Image",
+        "description": "Title for output image section."
+    },
+    "downloadImageLink": {
+        "message": "Download Image",
+        "description": "Text for download link."
+    },
+    "pleaseUploadImageFirst": {
+        "message": "Please upload an image first.",
+        "description": "Alert message when no image is uploaded."
+    },
+    "enterValidPercentage": {
+        "message": "Please enter a valid percentage.",
+        "description": "Alert message for invalid percentage input."
+    },
+    "croppingFeatureNotImplemented": {
+        "message": "Cropping feature is not yet implemented. Please select an area on the image.",
+        "description": "Alert message for cropping."
+    },
+    "backgroundRemovalComplex": {
+        "message": "Background removal is a complex feature and is not yet implemented.",
+        "description": "Alert message for background removal."
+    },
+    "atLeastTwoImagesForStitching": {
+        "message": "Please upload at least two images for stitching.",
+        "description": "Alert message for stitching without enough images."
+    },
+    "imagesLoadedForStitching": {
+        "message": "images loaded for stitching.",
+        "description": "Alert message for successful image loading for stitching. Preceded by a number."
+    },
+    "enterValidQuality": {
+        "message": "Please enter a valid quality (0-100).",
+        "description": "Alert message for invalid quality input."
+    },
+    "enterValidCropCoordinates": {
+        "message": "Please enter valid crop coordinates and dimensions.",
+        "description": "Alert message for invalid crop coordinates."
+    },
+    "cropAreaExceedsBoundaries": {
+        "message": "Crop area exceeds image boundaries.",
+        "description": "Alert message for crop area out of bounds."
+    },
+    "imageInfoText": {
+        "message": "Filename: %s, Extension: %s, Size: %s, Width: %s, Height: %s",
+        "description": "Image information text. Placeholders for filename, extension, file size, width, height."
+    }
+}

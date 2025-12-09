@@ -1,0 +1,174 @@
+{
+    "extensionName": {
+        "message": "圖片工具包",
+        "description": "Name of the extension."
+    },
+    "extensionDescription": {
+        "message": "一個用於圖片處理的 Chrome 擴充功能（分析、縮放、壓縮、裁切、去背、拼接）。",
+        "description": "Description of the extension."
+    },
+    "imageToolkitTitle": {
+        "message": "圖片工具包",
+        "description": "Main title of the popup."
+    },
+    "uploadImageLabel": {
+        "message": "上傳圖片：",
+        "description": "Label for image upload input."
+    },
+    "originalImageSectionTitle": {
+        "message": "原始圖片",
+        "description": "Title for original image section."
+    },
+    "toolsSectionTitle": {
+        "message": "工具",
+        "description": "Title for tools section."
+    },
+    "imageAnalysisTitle": {
+        "message": "圖片分析",
+        "description": "Title for image analysis tool."
+    },
+    "analyzeButton": {
+        "message": "分析",
+        "description": "Button text for image analysis."
+    },
+    "imageScalingTitle": {
+        "message": "圖片縮放",
+        "description": "Title for image scaling tool."
+    },
+    "percentagePlaceholder": {
+        "message": "百分比",
+        "description": "Placeholder for percentage input."
+    },
+    "orText": {
+        "message": "或",
+        "description": "Text for 'or' separator."
+    },
+    "widthPlaceholder": {
+        "message": "寬",
+        "description": "Placeholder for width input."
+    },
+    "heightPlaceholder": {
+        "message": "高",
+        "description": "Placeholder for height input."
+    },
+    "scaleButton": {
+        "message": "縮放",
+        "description": "Button text for image scaling."
+    },
+    "imageCompressionTitle": {
+        "message": "圖片壓縮",
+        "description": "Title for image compression tool."
+    },
+    "qualityPlaceholder": {
+        "message": "品質 (0-100)",
+        "description": "Placeholder for quality input."
+    },
+    "compressButton": {
+        "message": "壓縮",
+        "description": "Button text for image compression."
+    },
+    "imageCroppingTitle": {
+        "message": "圖片裁切",
+        "description": "Title for image cropping tool."
+    },
+    "cropFree": {
+        "message": "隨意選取",
+        "description": "Button for free crop mode."
+    },
+    "cropSquare": {
+        "message": "正方形 (1:1)",
+        "description": "Button for square crop mode."
+    },
+    "crop169": {
+        "message": "長方形 (16:9)",
+        "description": "Button for 16:9 crop mode."
+    },
+    "cropRound": {
+        "message": "圓形",
+        "description": "Button for round crop mode."
+    },
+    "cropButton": {
+        "message": "裁切",
+        "description": "Button text for image cropping."
+    },
+    "imageBackgroundRemovalTitle": {
+        "message": "圖片去背",
+        "description": "Title for image background removal tool."
+    },
+    "removeBackgroundButton": {
+        "message": "移除背景",
+        "description": "Button text for background removal."
+    },
+    "imageStitchingTitle": {
+        "message": "圖片拼接",
+        "description": "Title for image stitching tool."
+    },
+    "uploadMultipleImagesForStitchingText": {
+        "message": "上傳多張圖片進行拼接。",
+        "description": "Instruction text for stitching."
+    },
+    "uploadImagesForStitchingLabel": {
+        "message": "上傳拼接圖片：",
+        "description": "Label for stitching image upload."
+    },
+    "horizontalOption": {
+        "message": "水平",
+        "description": "Option for horizontal stitching."
+    },
+    "verticalOption": {
+        "message": "垂直",
+        "description": "Option for vertical stitching."
+    },
+    "stitchButton": {
+        "message": "拼接",
+        "description": "Button text for image stitching."
+    },
+    "outputImageSectionTitle": {
+        "message": "輸出圖片",
+        "description": "Title for output image section."
+    },
+    "downloadImageLink": {
+        "message": "下載圖片",
+        "description": "Text for download link."
+    },
+    "pleaseUploadImageFirst": {
+        "message": "請先上傳圖片。",
+        "description": "Alert message when no image is uploaded."
+    },
+    "enterValidPercentage": {
+        "message": "請輸入有效的百分比。",
+        "description": "Alert message for invalid percentage input."
+    },
+    "croppingFeatureNotImplemented": {
+        "message": "裁切功能尚未實作。請在圖片上選擇區域。",
+        "description": "Alert message for cropping."
+    },
+    "backgroundRemovalComplex": {
+        "message": "去背是複雜的功能，尚未實作。",
+        "description": "Alert message for background removal."
+    },
+    "atLeastTwoImagesForStitching": {
+        "message": "請至少上傳兩張圖片進行拼接。",
+        "description": "Alert message for stitching without enough images."
+    },
+    "imagesLoadedForStitching": {
+        "message": "張圖片已載入。",
+        "description": "Alert message for successful image loading for stitching. Preceded by a number."
+    },
+    "enterValidQuality": {
+        "message": "請輸入有效的品質 (0-100)。",
+        "description": "Alert message for invalid quality input."
+    },
+    "enterValidCropCoordinates": {
+        "message": "請輸入有效的裁切座標和尺寸。",
+        "description": "Alert message for invalid crop coordinates."
+    },
+    "cropAreaExceedsBoundaries": {
+        "message": "裁切區域超出圖片邊界。",
+        "description": "Alert message for crop area out of bounds."
+    },
+    "imageInfoText": {
+        "message": "檔案名稱：%s，副檔名：%s，大小：%s，寬度：%s，高度：%s",
+        "description": "Image information text. Placeholders for filename, extension, file size, width, height."
+    }
+}
