@@ -178,5 +178,25 @@
     "outputStats": {
         "message": "Size: %s, Dimensions: %s x %s",
         "description": "Format string for output image stats: Size, Width, Height"
+    },
+    "outputFormatLabel": {
+        "message": "Output Format",
+        "description": "Label for output format select."
+    },
+    "formatOriginal": {
+        "message": "Original",
+        "description": "Option for original format."
+    },
+    "formatJPEG": {
+        "message": "JPEG",
+        "description": "Option for JPEG format."
+    },
+    "formatPNG": {
+        "message": "PNG",
+        "description": "Option for PNG format."
+    },
+    "formatWEBP": {
+        "message": "WebP",
+        "description": "Option for WebP format."
     }
 }

@@ -38,6 +38,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const imageUploadStitch = document.getElementById('imageUploadStitch');
     const stitchDirectionSelect = document.getElementById('stitchDirection');
     const stitchImagesBtn = document.getElementById('stitchImages');
+
+    const compressFormatSelect = document.getElementById('compressFormat');
     const outputCanvas = document.getElementById('outputCanvas');
     const outputImage = document.getElementById('outputImage');
     const downloadLink = document.getElementById('downloadLink');
@@ -366,7 +368,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         ctx.clearRect(0, 0, uploadedImage.naturalWidth, uploadedImage.naturalHeight);
         ctx.drawImage(uploadedImage, 0, 0);
 
-        const mimeType = uploadedImage.src.startsWith('data:image/jpeg') ? 'image/jpeg' : 'image/png';
+        let mimeType = 'image/png';
+        const format = compressFormatSelect.value;
+
+        if (format === 'original') {
+             mimeType = uploadedImage.src.startsWith('data:image/jpeg') ? 'image/jpeg' : 'image/png';
+             // If original is webp, we should probably respect that if possible, but toDataURL support varies.
+             if (uploadedImage.src.startsWith('data:image/webp')) mimeType = 'image/webp';
+        } else if (format === 'jpeg') {
+            mimeType = 'image/jpeg';
+        } else if (format === 'png') {
+            mimeType = 'image/png';
+        } else if (format === 'webp') {
+            mimeType = 'image/webp';
+        }
+
         const compressedDataURL = outputCanvas.toDataURL(mimeType, quality / 100);
         displayProcessedImage(compressedDataURL);
     });
@@ -534,7 +550,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     function displayProcessedImage(dataURL) {
         outputImage.src = dataURL;
         outputImage.style.display = 'block';
+
+        // Detect Extension
+        let ext = 'png';
+        const match = dataURL.match(/^data:image\/(.*?);/);
+        if (match && match[1]) {
+            ext = match[1] === 'jpeg' ? 'jpg' : match[1];
+        }
+
         downloadLink.href = dataURL;
+        downloadLink.download = `processed_image.${ext}`;
         downloadLink.style.display = 'block';
         outputCanvas.style.display = 'none'; // Hide canvas if image is directly displayed
 

@@ -166,5 +166,25 @@
     "outputStats": {
         "message": "サイズ: %s, 寸法: %s x %s",
         "description": "Format string for output image stats: Size, Width, Height"
+    },
+    "outputFormatLabel": {
+        "message": "出力形式",
+        "description": "Label for output format select."
+    },
+    "formatOriginal": {
+        "message": "元形式",
+        "description": "Option for original format."
+    },
+    "formatJPEG": {
+        "message": "JPEG",
+        "description": "Option for JPEG format."
+    },
+    "formatPNG": {
+        "message": "PNG",
+        "description": "Option for PNG format."
+    },
+    "formatWEBP": {
+        "message": "WebP",
+        "description": "Option for WebP format."
     }
 }
