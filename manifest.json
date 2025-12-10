@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Image Toolkit Extension",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "A Chrome extension for image manipulation (analysis, scaling, compression, cropping, background removal, stitching).",
     "default_locale": "en",
     "action": {

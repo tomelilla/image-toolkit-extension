@@ -31,13 +31,29 @@
         "message": "分析",
         "description": "Button text for image analysis."
     },
+    "imageScalingTitle": {
+        "message": "图片缩放",
+        "description": "Title for image scaling tool."
+    },
     "proportionalScalingTitle": {
         "message": "等比例缩放",
         "description": "Title for proportional scaling tool."
     },
     "percentagePlaceholder": {
-        "message": "百分比 (例如：50)",
+        "message": "百分比",
         "description": "Placeholder for percentage input."
+    },
+    "orText": {
+        "message": "或",
+        "description": "Text for 'or' separator."
+    },
+    "widthPlaceholder": {
+        "message": "宽",
+        "description": "Placeholder for width input."
+    },
+    "heightPlaceholder": {
+        "message": "高",
+        "description": "Placeholder for height input."
     },
     "scaleButton": {
         "message": "缩放",
@@ -58,6 +74,22 @@
     "imageCroppingTitle": {
         "message": "图片裁剪",
         "description": "Title for image cropping tool."
+    },
+    "cropFree": {
+        "message": "随意选取",
+        "description": "Button for free crop mode."
+    },
+    "cropSquare": {
+        "message": "正方形 (1:1)",
+        "description": "Button for square crop mode."
+    },
+    "crop169": {
+        "message": "长方形 (16:9)",
+        "description": "Button for 16:9 crop mode."
+    },
+    "cropRound": {
+        "message": "圆形",
+        "description": "Button for round crop mode."
     },
     "cropXLabel": {
         "message": "X轴：",
@@ -190,5 +222,9 @@
     "enableAutoAlign": {
         "message": "自动移除重叠 (智能拼接)",
         "description": "Label for auto-align checkbox."
+    },
+    "openFullScreen": {
+        "message": "打开全屏",
+        "description": "Button to open editor in a new tab."
     }
 }

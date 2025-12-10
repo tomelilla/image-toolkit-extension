@@ -31,13 +31,29 @@
         "message": "分析",
         "description": "Button text for image analysis."
     },
+    "imageScalingTitle": {
+        "message": "画像スケーリング",
+        "description": "Title for image scaling tool."
+    },
     "proportionalScalingTitle": {
         "message": "比率スケーリング",
         "description": "Title for proportional scaling tool."
     },
     "percentagePlaceholder": {
-        "message": "パーセンテージ (例: 50)",
+        "message": "パーセンテージ",
         "description": "Placeholder for percentage input."
+    },
+    "orText": {
+        "message": "または",
+        "description": "Text for 'or' separator."
+    },
+    "widthPlaceholder": {
+        "message": "幅",
+        "description": "Placeholder for width input."
+    },
+    "heightPlaceholder": {
+        "message": "高さ",
+        "description": "Placeholder for height input."
     },
     "scaleButton": {
         "message": "スケール",
@@ -58,6 +74,22 @@
     "imageCroppingTitle": {
         "message": "画像トリミング",
         "description": "Title for image cropping tool."
+    },
+    "cropFree": {
+        "message": "自由選択",
+        "description": "Button for free crop mode."
+    },
+    "cropSquare": {
+        "message": "正方形 (1:1)",
+        "description": "Button for square crop mode."
+    },
+    "crop169": {
+        "message": "16:9",
+        "description": "Button for 16:9 crop mode."
+    },
+    "cropRound": {
+        "message": "円形",
+        "description": "Button for round crop mode."
     },
     "cropXLabel": {
         "message": "X座標：",
@@ -190,5 +222,9 @@
     "enableAutoAlign": {
         "message": "重複部分を自動削除 (スマート結合)",
         "description": "Label for auto-align checkbox."
+    },
+    "openFullScreen": {
+        "message": "全画面で開く",
+        "description": "Button to open editor in a new tab."
     }
 }

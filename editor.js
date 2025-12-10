@@ -2,13 +2,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize I18n
     const languageSelector = document.getElementById('languageSelector');
+    const confirmLanguageBtn = document.getElementById('confirmLanguage');
     await I18nManager.init();
     languageSelector.value = I18nManager.currentLocale;
 
-    // Handle Language Switch
-    languageSelector.addEventListener('change', async (e) => {
-        const newLang = e.target.value;
-        await I18nManager.setLanguage(newLang);
+    // Handle Language Switch - only when confirm button is clicked
+    confirmLanguageBtn.addEventListener('click', async () => {
+        const newLang = languageSelector.value;
+        if (newLang !== I18nManager.currentLocale) {
+            await I18nManager.setLanguage(newLang);
+        }
     });
 
     // Re-render info on language change

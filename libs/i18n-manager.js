@@ -77,39 +77,112 @@ const I18nManager = {
     },
 
     localizePage() {
-        // Localize title
-        if (document.title.includes('__MSG_')) {
-            document.title = document.title.replace(/__MSG_(\w+)__/g, (match, v1) => {
+        // Helper function to extract message key from __MSG_xxx__ format
+        const extractMsgKey = (text) => {
+            const match = text.match(/__MSG_(\w+)__/);
+            return match ? match[1] : null;
+        };
+
+        // Helper function to replace message keys
+        const replaceMsgKeys = (text) => {
+            if (!text) return text;
+            return text.replace(/__MSG_(\w+)__/g, (match, v1) => {
                 return this.getMessage(v1) || match;
             });
+        };
+
+        // Localize title
+        if (document.title.includes('__MSG_')) {
+            const key = extractMsgKey(document.title);
+            if (key) {
+                document.documentElement.setAttribute('data-i18n-title', key);
+                document.title = this.getMessage(key) || document.title;
+            }
+        } else if (document.documentElement.hasAttribute('data-i18n-title')) {
+            const key = document.documentElement.getAttribute('data-i18n-title');
+            document.title = this.getMessage(key) || document.title;
         }
 
-        // Localize text nodes
-        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-        let node;
-        while(node = walker.nextNode()) {
-             // Basic replacement logic
-             if (node.nodeValue.includes('__MSG_')) {
-                 node.nodeValue = node.nodeValue.replace(/__MSG_(\w+)__/g, (match, v1) => {
-                    return this.getMessage(v1) || match;
+        // Localize all elements
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+            // Localize text content for elements that only contain text (no child elements)
+            if (el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
+                const textNode = el.childNodes[0];
+
+                // First time: extract and store message key
+                if (textNode.nodeValue && textNode.nodeValue.includes('__MSG_')) {
+                    const key = extractMsgKey(textNode.nodeValue);
+                    if (key) {
+                        el.setAttribute('data-i18n', key);
+                        textNode.nodeValue = this.getMessage(key) || textNode.nodeValue;
+                    }
+                }
+                // Subsequent times: use stored message key
+                else if (el.hasAttribute('data-i18n')) {
+                    const key = el.getAttribute('data-i18n');
+                    textNode.nodeValue = this.getMessage(key) || textNode.nodeValue;
+                }
+            } else {
+                // For elements with mixed content, only update direct text nodes
+                el.childNodes.forEach((node, index) => {
+                    if (node.nodeType === Node.TEXT_NODE && node.nodeValue) {
+                        // First time: extract and store message key
+                        if (node.nodeValue.includes('__MSG_')) {
+                            const key = extractMsgKey(node.nodeValue);
+                            if (key) {
+                                el.setAttribute(`data-i18n-text-${index}`, key);
+                                node.nodeValue = this.getMessage(key) || node.nodeValue;
+                            }
+                        }
+                        // Subsequent times: use stored message key
+                        else if (el.hasAttribute(`data-i18n-text-${index}`)) {
+                            const key = el.getAttribute(`data-i18n-text-${index}`);
+                            node.nodeValue = this.getMessage(key) || node.nodeValue;
+                        }
+                    }
                 });
-             }
-        }
+            }
 
-        // Localize attributes
-        const allElements = document.getElementsByTagName('*');
-        for(let i=0; i < allElements.length; i++) {
-            const el = allElements[i];
-            const attributes = el.attributes;
-            for(let j=0; j < attributes.length; j++) {
-                const attr = attributes[j];
-                if(attr.value && attr.value.includes('__MSG_')) {
-                     attr.value = attr.value.replace(/__MSG_(\w+)__/g, (match, v1) => {
-                        return this.getMessage(v1) || match;
-                    });
+            // Localize common attributes
+            const attrsToLocalize = ['placeholder', 'title', 'alt', 'aria-label', 'value'];
+            attrsToLocalize.forEach(attrName => {
+                if (el.hasAttribute(attrName)) {
+                    const attrValue = el.getAttribute(attrName);
+
+                    // First time: extract and store message key
+                    if (attrValue && attrValue.includes('__MSG_')) {
+                        const key = extractMsgKey(attrValue);
+                        if (key) {
+                            el.setAttribute(`data-i18n-${attrName}`, key);
+                            el.setAttribute(attrName, this.getMessage(key) || attrValue);
+                        }
+                    }
+                    // Subsequent times: use stored message key
+                    else if (el.hasAttribute(`data-i18n-${attrName}`)) {
+                        const key = el.getAttribute(`data-i18n-${attrName}`);
+                        el.setAttribute(attrName, this.getMessage(key) || attrValue);
+                    }
+                }
+            });
+
+            // Special handling for option elements
+            if (el.tagName === 'OPTION') {
+                // First time: extract and store message key
+                if (el.textContent && el.textContent.includes('__MSG_')) {
+                    const key = extractMsgKey(el.textContent);
+                    if (key) {
+                        el.setAttribute('data-i18n', key);
+                        el.textContent = this.getMessage(key) || el.textContent;
+                    }
+                }
+                // Subsequent times: use stored message key
+                else if (el.hasAttribute('data-i18n')) {
+                    const key = el.getAttribute('data-i18n');
+                    el.textContent = this.getMessage(key) || el.textContent;
                 }
             }
-        }
+        });
 
         // Dispatch event for other scripts to know language changed (e.g., to re-render JS generated text)
         window.dispatchEvent(new CustomEvent('languageChanged', { detail: { locale: this.currentLocale } }));
