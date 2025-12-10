@@ -70,3 +70,10 @@ Supported languages:
 *   繁體中文 (Traditional Chinese)
 *   简体中文 (Simplified Chinese)
 *   日本語 (Japanese)
+
+## Privacy Policy
+
+Your privacy is our priority. This extension processes all images locally and does not collect any data.
+
+*   [Privacy Policy (English)](./docs/PRIVACY_POLICY.md)
+*   [隱私權政策（繁體中文）](./docs/PRIVACY_POLICY_zh-TW.md)
